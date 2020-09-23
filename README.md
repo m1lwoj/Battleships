@@ -1,12 +1,8 @@
-# Foobar
+# Battleships
 
-Foobar is a Python library for dealing with word pluralization.
+Simple Battleships game with Console UI
 
 ## Installation
-
-```bash
-
-```
 
 ## Usage
 
