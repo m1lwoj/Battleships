@@ -4,7 +4,6 @@ using Battleships.Core.Ships;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Battleships.Core.Board
 {
@@ -19,16 +18,15 @@ namespace Battleships.Core.Board
             PopulateBoardFields();
         }
 
-        public bool Shoot(int x, int y)
+        public ShootResult Shoot(int x, int y)
         {
             if (!AreCoordinatesValid(x, y)) throw new Exception($"Invalid coordinates x: {x}, y: {y}.");
 
             var field = Board[x, y];
-            if (field.CanBeShot) throw new InvalidOperationException($"Coordinates x: {x}, y: {y} has been already shot.");
+            if (!field.CanBeShot) throw new InvalidOperationException($"Coordinates x: {x}, y: {y} has been already shot.");
 
             return field.Shoot();
         }
-
 
         public void SetShip(ShipLocation shipLocation)
         {
@@ -36,12 +34,17 @@ namespace Battleships.Core.Board
                 throw new InvalidOperationException(
                     $"Invalid coordinates row: {shipLocation.Coordinate.Row}, column: {shipLocation.Coordinate.Column}");
 
-            if (!DoesShipFitOnBoard(shipLocation.Ship.Size, shipLocation.Coordinate.Row, shipLocation.Coordinate.Column, shipLocation.Direction)) 
+            if (!DoesShipFitOnBoard(shipLocation.Ship.Size, shipLocation.Coordinate.Row, shipLocation.Coordinate.Column, shipLocation.Direction))
                 throw new InvalidOperationException(
                     $"Cannot place ship x: {shipLocation.Coordinate.Row}, y: {shipLocation.Coordinate.Column}");
 
             var fields = GetFieldsForShip(shipLocation.Ship.Size, shipLocation.Coordinate.Row, shipLocation.Coordinate.Column, shipLocation.Direction);
             SetShipOnFields(fields, shipLocation.Ship);
+        }
+
+        internal bool AnyShipsLeftOnTheBattlefield()
+        {
+            return Board.Cast<Field>().All(f => f.Ship.IsSunk);
         }
 
         private void PopulateBoardFields()

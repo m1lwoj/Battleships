@@ -6,7 +6,7 @@ using Battleships.Core.Ships;
 using NUnit.Framework;
 using System;
 
-namespace Battleships.Tests
+namespace Battleships.Tests.Games
 {
     [TestFixture]
     public class GameInitializationTests
@@ -43,7 +43,6 @@ namespace Battleships.Tests
                    .AddPlayer(new Player("Player1")),
                    $"User names should be unique");
         }
-
 
         [Test]
         public void CanBuildValidGame()

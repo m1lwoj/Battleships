@@ -12,6 +12,12 @@ namespace Battleships.Core.Game.Builders
             return (T)this;
         }
 
+        public T WithCoordinatesStartingAt(string input)
+        {
+            _ship.Coordinate = Coordinate.Create(input);
+            return (T)this;
+        }
+
         public T AndDirection(Direction direction)
         {
             if (_ship.Coordinate.Equals(default(Coordinate)))

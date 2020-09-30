@@ -23,9 +23,15 @@ namespace Battleships.Core.Game
             OwnBoard.SetShip(shipLocation);
         }
 
-        internal bool Shoot(Coordinate coordinate)
+        internal ShootResult Shoot(Coordinate coordinate)
         {
-            return OwnBoard.Shoot(coordinate.Row, coordinate.Column);
+            var result = OwnBoard.Shoot(coordinate.Row, coordinate.Column);
+            if(result == ShootResult.Sunk && OwnBoard.AnyShipsLeftOnTheBattlefield())
+            {
+                return ShootResult.Won;
+            }
+
+            return result;
         }
     }
 }

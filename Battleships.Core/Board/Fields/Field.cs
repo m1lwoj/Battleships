@@ -1,4 +1,5 @@
 ﻿using Battleships.Core.Board;
+using Battleships.Core.Game;
 using Battleships.Core.Ships;
 using System;
 using System.Collections.Generic;
@@ -21,17 +22,20 @@ namespace Battleships.Core.Board.Fields
             OccupationType = OccupationType.Occupied;
         }
 
-        public bool Shoot()
+        public ShootResult Shoot()
         {
             if (IsShot) throw new Exception("Field already shot");
 
-            if(OccupationType == OccupationType.Occupied)
+            if (Ship == null && IsFree) return ShootResult.Missed;
+
+            Ship.Shoot();
+
+            if (Ship.IsSunk)
             {
-                OccupationType = OccupationType.Shot;
-                return true;
+                return ShootResult.Sunk;
             }
 
-            return false;
+            return ShootResult.Shot;
         }
     }
 }

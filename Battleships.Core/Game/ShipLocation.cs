@@ -7,8 +7,8 @@ namespace Battleships.Core.Game
     {
         public ShipLocation()
         {
-
         }
+
         public ShipLocation(IShip ship, Coordinate startingCoordinate, Direction direction)
         {
             Ship = ship;

@@ -2,8 +2,8 @@
 
 namespace Battleships.Core.Ships
 {
-    public class DestroyerShip : IShip
+    public class DestroyerShip : Ship
     {
-        public byte Size => 5;
+        public override byte Size => 5;
     }
 }

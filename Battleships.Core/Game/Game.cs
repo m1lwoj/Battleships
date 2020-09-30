@@ -1,11 +1,9 @@
-﻿using Battleships.Core.Board;
-using Battleships.Core.Board.Fields;
-using Battleships.Core.Ships;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Runtime.CompilerServices;
 
+[assembly: InternalsVisibleTo("Battleships.Tests")]
 namespace Battleships.Core.Game
 {
     public class Game
@@ -13,7 +11,7 @@ namespace Battleships.Core.Game
         private static byte PlayersLimit = 2;
 
         private IGameSettings _gameSettings;
-        private readonly GameBoard _board;
+        private string _lastShooterName;
         private readonly Dictionary<string, Player> Players = new Dictionary<string, Player>(PlayersLimit);
 
         public static Game Create(IGameSettings settings)
@@ -38,6 +36,22 @@ namespace Battleships.Core.Game
         public void Start()
         {
         }
+        
+        public ShootResult Shoot(string shooterName, string coordinate)
+        {
+            var coord = Coordinate.Create(coordinate);
+
+            if (!Players.ContainsKey(shooterName))
+                throw new InvalidOperationException($"Player with name: {shooterName} does not belong to the game");
+            
+            if (shooterName == _lastShooterName)
+                throw new InvalidOperationException($"{shooterName} can't do two shoots in a row");
+
+            var result = ShootToPlayer(Players.Single(p => p.Key != shooterName).Value.Name, coord);
+            _lastShooterName = shooterName;
+
+            return result;
+        }
 
         internal void AddPlayer(Player player)
         {
@@ -57,17 +71,9 @@ namespace Battleships.Core.Game
             return Players[playerName];
         }
 
-        public bool Shoot(string shooterName, Coordinate coordinate)
+        private ShootResult ShootToPlayer(string playerName, Coordinate coordinate)
         {
-            if (!Players.ContainsKey(shooterName))
-                throw new InvalidOperationException($"Player with name: {shooterName} does not belong to the game");
-
-            return ShootToPlayer(Players.Single(p => p.Key != shooterName).Value.Name, coordinate);
-        }
-
-        private bool ShootToPlayer(string playerName, Coordinate coordinate)
-        {
-            if (Players.ContainsKey(playerName))
+            if (!Players.ContainsKey(playerName))
                 throw new InvalidOperationException($"Player with name: {playerName} does not belong to the game");
 
             return Players[playerName].Shoot(coordinate);
