@@ -44,7 +44,7 @@ namespace Battleships.Core.Board
 
         internal bool AnyShipsLeftOnTheBattlefield()
         {
-            return Board.Cast<Field>().All(f => f.Ship.IsSunk);
+            return Board.Cast<Field>().All(f => f.Ship == null || f.Ship.IsSunk);
         }
 
         private void PopulateBoardFields()
