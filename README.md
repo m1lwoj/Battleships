@@ -14,7 +14,14 @@ The player enters or selects coordinates of the form “A5”, where “A” is 
 
 ## Installation
 
+### Docker
+```sh
+docker pull m1losz/battleships-consoleui
+docker run -it m1losz/battleships-consoleui 
+```
+
 ## Usage
+
 
 ## Decision log
 
