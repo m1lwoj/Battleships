@@ -21,6 +21,7 @@ Game UI supports only **simple** game mode, which is one-sided shooting to oppon
 
 Library has been implemented in a way that default game settings can be easily customized (number of ships, size of the board) and extended with additional game modes (like regular gameplay against opponent) and additional game logic.
 
+![Battleships.ConsoleUI](https://github.com/m1lwoj/Battleships/blob/master/README/BattleshipsUI.JPG)
 
 ## Continuous Integration
 ![.NET Core](https://github.com/m1lwoj/Battleships/workflows/.NET%20Core/badge.svg?branch=master)
@@ -121,6 +122,7 @@ First question I asked to myself was:
 - Each Game Instance would store state of the game (to use it for next shoots).
 - From time to time game storages would be stored somewhere externally in case of lost connection, or one of Game Instance went down
 
+![](https://github.com/m1lwoj/Battleships/blob/master/README/Battleships-scaling.png)
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
