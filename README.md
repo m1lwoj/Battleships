@@ -14,14 +14,51 @@ The player enters or selects coordinates of the form “A5”, where “A” is 
 
 ## Installation
 
-### Docker
+### From repository
+
+Clone repository first:
+
+```sh
+git clone https://github.com/m1lwoj/Battleships.git
+cd Battleships
+```
+#### .NET Core
+
+```sh
+cd Battleships.ConsoleUI
+dotnet build --configuration Release
+dotnet run
+```
+
+#### Docker
+
+```sh
+docker build -f Battleships.ConsoleUI/Dockerfile -t battleships-consoleui .
+docker run -it battleships-consoleui
+```
+
+#### Tests (Docker)
+
+```sh
+cd Battleships.Tests/
+dotnet build
+dotnet test
+```
+
+#### Tests (.NET Core)
+```sh
+docker build -f Battleships.Tests/Dockerfile -t battleships-tests .
+docker run -it battleships-tests 
+```
+
+### Standalone
+
+### Docker 
+
 ```sh
 docker pull m1losz/battleships-consoleui
 docker run -it m1losz/battleships-consoleui 
 ```
-
-## Usage
-
 
 ## Decision log
 
