@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Battleships.Core.Game.Players;
 
 namespace Battleships.Core.Game.Builders
 {
@@ -12,6 +10,7 @@ namespace Battleships.Core.Game.Builders
         {
             _player = player;
             _game.AddPlayer(player);
+
             return (T)this;
         }
     }

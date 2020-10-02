@@ -1,8 +1,7 @@
-﻿using Battleships.Core.Board;
-using Battleships.Core.Board.Fields;
-using Battleships.Core.Game;
+﻿using Battleships.Core.Game;
 using Battleships.Core.Game.Builders;
 using Battleships.Core.Ships;
+using Battleships.Core.Ships.Models;
 using NUnit.Framework;
 using System;
 
@@ -11,15 +10,8 @@ namespace Battleships.Tests.Games
     [TestFixture]
     public class GameInitializationTests
     {
-        private static int rowsNumber = 10;
-        private static int columnsNumber = 10;
-        private GameBoard _gameBoard;
-
-        [OneTimeSetUp]
-        public void SetUp()
-        {
-            _gameBoard = new GameBoard(new GameSettings(rowsNumber, columnsNumber));
-        }
+        private const string Player1 = "Player1";
+        private const string Player2 = "Player2";
 
         [Test]
         public void CannotAddMoreThanTwoPlayers()
@@ -27,10 +19,10 @@ namespace Battleships.Tests.Games
             Assert.Throws<InvalidOperationException>(() =>
                     GameBuilderDirector
                    .NewGame
-                   .AddPlayer(new Player("Player1"))
-                   .AddPlayer(new Player("Player2"))
-                   .AddPlayer(new Player("Player3")),
-                   $"For given configuration it should not be possible to add more than two players"); 
+                   .AddPlayer(new Core.Game.Players.Player(Player1))
+                   .AddPlayer(new Core.Game.Players.Player(Player2))
+                   .AddPlayer(new Core.Game.Players.Player("Player3")),
+                   $"For given configuration it should not be possible to add more than two players");
         }
 
         [Test]
@@ -39,31 +31,33 @@ namespace Battleships.Tests.Games
             Assert.Throws<InvalidOperationException>(() =>
                     GameBuilderDirector
                    .NewGame
-                   .AddPlayer(new Player("Player1"))
-                   .AddPlayer(new Player("Player1")),
+                   .AddPlayer(new Core.Game.Players.Player(Player1))
+                   .AddPlayer(new Core.Game.Players.Player(Player1)),
                    $"User names should be unique");
         }
 
         [Test]
         public void CanBuildValidGame()
         {
+            GameSettings.Instance.SetNumberOfShips(numberOfBattleships: 1, numberOfDestroyerShips: 4);
+
             var game = GameBuilderDirector
                    .NewGame
-                   .AddPlayer(new Player("Player1"))
+                   .AddPlayer(new Core.Game.Players.Player(Player1))
                         .AddShip(ShipsFactory.CreateDestroyerShip())
-                            .WithCoordinatesStartingAt(new Coordinate(0, 0))
+                            .WithCoordinatesStartingAt("A1")
                             .AndDirection(Direction.Vertical)
                         .AddShip(ShipsFactory.CreateDestroyerShip())
-                            .WithCoordinatesStartingAt(new Coordinate(0, 1))
+                            .WithCoordinatesStartingAt("A2")
                             .AndDirection(Direction.Vertical)
-                   .AddPlayer(new Player("Player2"))
+                   .AddPlayer(new Core.Game.Players.Player(Player2))
                         .AddShip(ShipsFactory.CreateDestroyerShip())
-                            .WithCoordinatesStartingAt(new Coordinate(0, 0))
+                            .WithCoordinatesStartingAt("A1")
                             .AndDirection(Direction.Vertical)
                         .AddShip(ShipsFactory.CreateDestroyerShip())
-                            .WithCoordinatesStartingAt(new Coordinate(0, 1))
+                            .WithCoordinatesStartingAt("A2")
                             .AndDirection(Direction.Vertical)
-                    .Build();
+                    .Start();
 
             Assert.IsNotNull(game);
         }

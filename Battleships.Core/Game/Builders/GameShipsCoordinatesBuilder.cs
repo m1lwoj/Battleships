@@ -1,5 +1,4 @@
-﻿using Battleships.Core.Board.Fields;
-using Battleships.Core.Ships;
+﻿using Battleships.Core.Ships.Models;
 using System;
 
 namespace Battleships.Core.Game.Builders
@@ -9,12 +8,14 @@ namespace Battleships.Core.Game.Builders
         public T WithCoordinatesStartingAt(Coordinate coordinate)
         {
             _ship.Coordinate = coordinate;
+
             return (T)this;
         }
 
         public T WithCoordinatesStartingAt(string input)
         {
             _ship.Coordinate = Coordinate.Create(input);
+
             return (T)this;
         }
 
@@ -22,7 +23,7 @@ namespace Battleships.Core.Game.Builders
         {
             if (_ship.Coordinate.Equals(default(Coordinate)))
                 throw new InvalidOperationException($"Coordinates has to be setup first, invoke {nameof(WithCoordinatesStartingAt)} method first.");
-       
+
             _ship.Direction = direction;
             _player.PlaceShip(_ship);
 

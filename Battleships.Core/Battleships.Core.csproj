@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Game\Fields\" />
+    <Folder Include="Game\Ships\Dtos\" />
   </ItemGroup>
 
 </Project>

@@ -1,82 +1,63 @@
-﻿using System;
+﻿using Battleships.Core.Game.Boards;
+using Battleships.Core.Game.Players;
+using Battleships.Core.Game.Results;
+using Battleships.Core.Game.Validators;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 
+///Adds coupling between two projects
 [assembly: InternalsVisibleTo("Battleships.Tests")]
 namespace Battleships.Core.Game
 {
-    public class Game
+    public class Game : IGame
     {
-        private static byte PlayersLimit = 2;
+        private static readonly byte PlayersLimit = 2;
 
-        private IGameSettings _gameSettings;
         private string _lastShooterName;
-        private readonly Dictionary<string, Player> Players = new Dictionary<string, Player>(PlayersLimit);
+        private readonly GameValidator _gameValidator;
+        private readonly Dictionary<string, IPlayer> Players = new Dictionary<string, IPlayer>(PlayersLimit);
 
-        public static Game Create(IGameSettings settings)
+        public Game()
         {
-            return new Game(settings);
+            _gameValidator = new GameValidator(PlayersLimit);
         }
 
-        public static Game Create()
-        {
-            return new Game(GameSettings.Default());
-        }
-
-        public Game(IGameSettings settings)
-        {
-            _gameSettings = settings;
-        }
-
-        internal Game()
-        {
-        }
-
-        public void Start()
-        {
-        }
-        
         public ShootResult Shoot(string shooterName, string coordinate)
         {
             var coord = Coordinate.Create(coordinate);
+            _gameValidator.ValidateShoot(Players, shooterName, _lastShooterName);
 
-            if (!Players.ContainsKey(shooterName))
-                throw new InvalidOperationException($"Player with name: {shooterName} does not belong to the game");
-            
-            if (shooterName == _lastShooterName)
-                throw new InvalidOperationException($"{shooterName} can't do two shoots in a row");
-
-            var result = ShootToPlayer(Players.Single(p => p.Key != shooterName).Value.Name, coord);
+            var result = ShootToPlayer(GetPlayerOpponent(shooterName), coord);
             _lastShooterName = shooterName;
 
             return result;
         }
 
-        internal void AddPlayer(Player player)
+        public IHiddenBoard GetPlayersOpponentBoard(string playerName)
         {
-            if (Players.Count + 1 > PlayersLimit)
-                throw new InvalidOperationException($"Maximum number of players riched: {PlayersLimit}");
+            _gameValidator.ValidatePlayerIsRegistered(Players, playerName);
+            string opponent = GetPlayerOpponent(playerName);
+            return Players[opponent].HiddenBoard;
+        }
 
-            if (Players.ContainsKey(player.Name))
-                throw new InvalidOperationException($"Player with name: {player.Name} has been already added");
+        public void AddPlayer(IPlayer player)
+        {
+            _gameValidator.ValidateAddingPlayer(Players, player);
 
             Players.Add(player.Name, player);
         }
 
-        public Player GetPlayer(string playerName)
-        {
-          
-            
-            return Players[playerName];
-        }
-
         private ShootResult ShootToPlayer(string playerName, Coordinate coordinate)
         {
-            if (!Players.ContainsKey(playerName))
-                throw new InvalidOperationException($"Player with name: {playerName} does not belong to the game");
+            _gameValidator.ValidatePlayerIsRegistered(Players, playerName);
 
             return Players[playerName].Shoot(coordinate);
+        }
+
+        private string GetPlayerOpponent(string player)
+        {
+            return Players.Single(p => p.Key != player).Value.Name;
         }
     }
 }

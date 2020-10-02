@@ -7,6 +7,6 @@
         {
             _game = new Game();
         }
-        public virtual Game Build() => _game;
+        public virtual Game Start() => _game;
     }
 }

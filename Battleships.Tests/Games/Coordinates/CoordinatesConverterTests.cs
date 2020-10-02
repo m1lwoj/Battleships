@@ -1,8 +1,6 @@
 ﻿using Battleships.Core.Game.Coordinates;
 using NUnit.Framework;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Battleships.Tests.Games.Coordinates
 {
@@ -41,14 +39,56 @@ namespace Battleships.Tests.Games.Coordinates
         [TestCase("Z", 25)]
         [TestCase("AA", 26)]
         [TestCase("AB", 27)]
-        [TestCase("CE", 82)]
+        [TestCase("ce", 82)]
         [TestCase("CW", 100)]
-        [TestCase("XEU", 16374)]
-        public void CanParseLetterIntoRowNumber(string rowName, int expectedRowNumber)
+        [TestCase("AAA", 702)]
+        public void CanConvertUserInputRowToBoardRow(string lettersRow, int expectedRowNumber)
         {
-            int result = CoordinateConverter.ConvertRowNameToRowNumber(rowName);
+            int result = CoordinateConverter.ConvertUserInputRowToBoardRow(lettersRow);
 
             Assert.AreEqual(expectedRowNumber, result);
+        }
+
+        [Test]
+        [TestCase(0, "A")]
+        [TestCase(1, "B")]
+        [TestCase(2, "C")]
+        [TestCase(3, "D")]
+        [TestCase(25, "Z")]
+        [TestCase(26, "AA")]
+        [TestCase(27, "AB")]
+        [TestCase(82, "CE")]
+        [TestCase(100, "CW")]
+        [TestCase(702, "AAA")]
+        public void CanConvertBoardRowNumberToLettersRow(int rowNumber, string expectedLettersRow)
+        {
+            string result = CoordinateConverter.ConvertBoardRowToUserInputRow(rowNumber);
+
+            Assert.AreEqual(expectedLettersRow, result);
+        }
+
+        [Test]
+        [TestCase(0, 1)]
+        [TestCase(8, 9)]
+        [TestCase(20, 21)]
+        [TestCase(99998, 99999)]
+        public void CanConvertBoardColumnNumberToUserInputNumberr(int boardColumnNumber, int expectedUserInputColumnNumber)
+        {
+            int result = CoordinateConverter.ConvertBoardColumnNumberToUserInputNumber(boardColumnNumber);
+
+            Assert.AreEqual(expectedUserInputColumnNumber, result);
+        }
+
+        [Test]
+        [TestCase(1, 0)]
+        [TestCase(2, 1)]
+        [TestCase(3, 2)]
+        [TestCase(99999, 99998)]
+        public void CanConvertUserInputNumberToBoardColumnNumber(int userInputColumnNumber, int expectedGameColumnNumber)
+        {
+            int result = CoordinateConverter.ConvertUserInputNumberToBoardColumnNumber(userInputColumnNumber);
+
+            Assert.AreEqual(expectedGameColumnNumber, result);
         }
     }
 }
