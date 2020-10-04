@@ -121,7 +121,7 @@ I wouldn't be myself if I didn't look on the project, requirements and developme
 - Game instance saves current state of the game and uses it for next shoots (redis or quick memory storage?)
 - From time to time game stores the state somewhere externally to recover it in case of any disturbance or failure.
 
-Simple draft below
+Draft:
 ![](https://github.com/m1lwoj/Battleships/blob/master/README/Battleships-scaling.png)
 
 ## License
